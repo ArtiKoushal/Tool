@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free online PDF editor - Edit, compress, convert and optimize your PDF files easily">
+    <meta name="keywords" content="PDF editor, PDF compression, PDF tools, online PDF, convert PDF">
+    <title>EasyPDF - Online PDF Editor and Optimizer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3a0ca3;
+            --light-color: #f7f7f9;
+            --dark-color: #2b2d42;
+            --success-color: #4cc9f0;
+            --warning-color: #f72585;
+            --gray-color: #8d99ae;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--success-color);
+        }
+        
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--gray-color);
+            margin-bottom: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            background-color: var(--gray-color);
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .main {
+            padding: 2rem 0;
+        }
+        
+        .editor-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .tools-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .tool-card {
+            flex: 1 1 200px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .tool-card.active {
+            border: 2px solid var(--primary-color);
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tool-card i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .tool-card h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .tool-card p {
+            color: var(--gray-color);
+            font-size: 0.9rem;
+        }
+        
+        .drop-area {
+            border: 2px dashed var(--gray-color);
+            border-radius: 8px;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            transition: border-color 0.3s;
+        }
+        
+        .drop-area.active {
+            border-color: var(--primary-color);
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+        
+        .drop-area i {
+            font-size: 3rem;
+            color: var(--gray-color);
+            margin-bottom: 1rem;
+        }
+        
+        .drop-area p {
+            margin-bottom: 1rem;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .options-container {
+            display: none;
+            margin-top: 2rem;
+        }
+        
+        .options-container.show {
+            display: block;
+        }
+        
+        .option-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .option-group h3 {
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+        }
+        
+        .option-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .option-item {
+            flex: 1 1 200px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .range-slider {
+            width: 100%;
+        }
+        
+        .preview-container {
+            margin-top: 2rem;
+            display: none;
+        }
+        
+        .preview-container.show {
+            display: block;
+        }
+        
+        .preview-area {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            height: 500px;
+            overflow: auto;
+            margin-bottom: 1rem;
+            background-color: #f5f5f5;
+            position: relative;
+        }
+        
+        .pdf-page {
+            margin: 10px auto;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            background-color: white;
+        }
+        
+        .page-controls {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1rem;
+            gap: 1rem;
+        }
+        
+        .page-info {
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+        
+        .ad-container {
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            padding: 1rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+        
+        .ad-container p {
+            margin-bottom: 0.5rem;
+            color: var(--gray-color);
+            font-size: 0.8rem;
+        }
+        
+        .features-section {
+            padding: 3rem 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .section-title p {
+            color: var(--gray-color);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-item {
+            background-color: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+        
+        .feature-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-item i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .feature-item h3 {
+            margin-bottom: 1rem;
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 3rem 0 1.5rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: var(--light-color);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--success-color);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        
+        .social-links a {
+            color: white;
+            font-size: 1.2rem;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+        
+        .social-links a:hover {
+            color: var(--success-color);
+        }
+        
+        /* Loading spinner */
+        .spinner {
+            display: none;
+            width: 40px;
+            height: 40px;
+            margin: 20px auto;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid var(--primary-color);
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .status-message {
+            text-align: center;
+            margin: 1rem 0;
+            padding: 0.8rem;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .status-message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+        
+        .status-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: var(--primary-color);
+                flex-direction: column;
+                text-align: center;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                z-index: 100;
+            }
+            
+            .nav-links.show {
+                display: flex;
+            }
+            
+            .nav-links li {
+                margin: 0;
+                padding: 1rem;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            
+            .mobile-menu {
+                display: block;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .action-buttons .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-file-pdf"></i>
+                    <span>EasyPDF</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#tools">Tools</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <div class="mobile-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="hero">
+        <div class="container">
+            <h1>Edit and Optimize Your PDF Files Locally</h1>
+            <p>Fast, easy, and secure PDF editor that works directly in your browser. No installations or internet connection required.</p>
+            <a href="#editor" class="btn">Get Started <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </div>
+
+    <main class="main">
+        <div class="container">
+            <!-- Ad Container - Top -->
+            <div class="ad-container">
+                <p>Advertisement</p>
+                <div id="adContainer1">
+                    <!-- Google AdSense Ad will be inserted here -->
+                    <script async src="https://cdnjs.cloudflare.com/ajax/libs/adsbygoogle-stub/1.0.0/adsbygoogle.min.js"></script>
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-YOUR_AD_CLIENT_ID"
+                         data-ad-slot="YOUR_AD_SLOT_ID"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                    <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+            </div>
+
+            <section id="editor" class="editor-container">
+                <h2>PDF Editor</h2>
+                <p>Upload your PDF file to start editing</p>
+                
+                <div class="tools-section">
+                    <div class="tool-card" data-tool="edit">
+                        <i class="fas fa-edit"></i>
+                        <h3>Edit PDF</h3>
+                        <p>Modify text, images, and links in your PDF file</p>
+                    </div>
+                    <div class="tool-card" data-tool="compress">
+                        <i class="fas fa-compress-alt"></i>
+                        <h3>Compress PDF</h3>
+                        <p>Reduce file size while maintaining quality</p>
+                    </div>
+                    <div class="tool-card" data-tool="convert">
+                        <i class="fas fa-exchange-alt"></i>
+                        <h3>Convert PDF</h3>
+                        <p>Convert to/from various formats</p>
+                    </div>
+                    <div class="tool-card" data-tool="merge">
+                        <i class="fas fa-object-group"></i>
+                        <h3>Merge PDF</h3>
+                        <p>Combine multiple PDF files into one</p>
+                    </div>
+                </div>
+                
+                <div class="drop-area" id="dropArea">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Drag & drop your PDF file here or</p>
+                    <button class="btn" id="selectFileBtn">Select File</button>
+                    <input type="file" id="fileInput" class="file-input" accept=".pdf">
+                </div>
+                
+                <div class="status-message" id="statusMessage"></div>
+                <div class="spinner" id="loadingSpinner"></div>
+                
+                <div class="options-container" id="editOptions">
+                    <h2>Edit Options</h2>
+                    
+                    <div class="option-group">
+                        <h3>General Settings</h3>
+                        <div class="option-row">
+                            <div class="option-item">
+                                <label for="fileName">Output Filename</label>
+                                <input type="text" id="fileName" placeholder="Enter filename">
+                            </div>
+                            <div class="option-item">
+                                <label for="outputFormat">Output Format</label>
+                                <select id="outputFormat">
+                                    <option value="pdf">PDF</option>
+                                    <option value="png">PNG (Image)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="option-group" id="compressOptions">
+                        <h3>Compression Settings</h3>
+                        <div class="option-row">
+                            <div class="option-item">
+                                <label for="compressionLevel">Compression Level</label>
+                                <input type="range" id="compressionLevel" class="range-slider" min="1" max="100" value="80">
+                                <div class="range-value">Medium (80%)</div>
+                            </div>
+                            <div class="option-item">
+                                <label for="imageQuality">Image Quality</label>
+                                <input type="range" id="imageQuality" class="range-slider" min="1" max="100" value="75">
+                                <div class="range-value">Good (75%)</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="option-group" id="convertOptions">
+                        <h3>Convert Settings</h3>
+                        <div class="option-row">
+                            <div class="option-item">
+                                <label for="dpi">Image DPI</label>
+                                <input type="number" id="dpi" min="72" max="600" value="300">
+                            </div>
+                            <div class="option-item">
+                                <label for="colorMode">Color Mode</label>
+                                <select id="colorMode">
+                                    <option value="color">Color</option>
+                                    <option value="grayscale">Grayscale</option>
+                                    <option value="bw">Black & White</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn" id="processBtn">Process PDF</button>
+                        <button class="btn" id="resetBtn" style="background-color: var(--gray-color);">Reset</button>
+                    </div>
+                </div>
+                
+                <div class="preview-container" id="previewContainer">
+                    <h2>Preview</h2>
+                    
+                    <div class="page-controls">
+                        <button class="btn" id="prevPage" disabled><i class="fas fa-chevron-left"></i> Previous</button>
+                        <div class="page-info">Page <span id="currentPage">1</span> of <span id="totalPages">1</span></div>
+                        <button class="btn" id="nextPage"><i class="fas fa-chevron-right"></i> Next</button>
+                    </div>
+                    
+                    <div class="preview-area" id="previewArea">
+                        <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
+                            <p>PDF preview will appear here</p>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn" id="downloadBtn">Download PDF</button>
+                        <button class="btn" id="editAgainBtn" style="background-color: var(--gray-color);">Edit Again</button>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Ad Container - Middle -->
+            <div class="ad-container">
+                <p>Advertisement</p>
+                <div id="adContainer2">
+                    <!-- Google AdSense Ad will be inserted here -->
+                    <script async src="https://cdnjs.cloudflare.com/ajax/libs/adsbygoogle-stub/1.0.0/adsbygoogle.min.js"></script>
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-YOUR_AD_CLIENT_ID"
+                         data-ad-slot="YOUR_AD_SLOT_ID"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                    <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+            </div>
+            
+            <section id="features" class="features-section">
+                <div class="section-title">
+                    <h2>Why Choose Our PDF Editor?</h2>
+                    <p>Our powerful PDF editor offers a wide range of features to help you work efficiently with your documents</p>
+                </div>
+                
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>Local Processing</h3>
+                        <p>Your files are processed locally in your browser. They never leave your computer, ensuring maximum privacy and security even without an internet connection.</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-bolt"></i>
+                        <h3>Fast & Efficient</h3>
+                        <p>Our editor is optimized for speed and performance, allowing you to edit even large PDF files without lag or delay.</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-magic"></i>
+                        <h3>Advanced Optimization</h3>
+                        <p>Smart algorithms reduce file size while maintaining quality, perfect for sharing or uploading to websites.</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-mobile-alt"></i>
+                        <h3>Fully Responsive</h3>
+                        <p>Works seamlessly on all devices - desktop, tablet, or mobile. Edit your PDFs anywhere, anytime.</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-cogs"></i>
+                        <h3>Customizable Options</h3>
+                        <p>Fine-tune your PDF processing with various customization options to get exactly the results you need.</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-file-export"></i>
+                        <h3>Multiple Export Formats</h3>
+                        <p>Save your processed PDFs in various formats for maximum flexibility.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Ad Container - Bottom -->
+            <div class="ad-container">
+                <p>Advertisement</p>
+                <div id="adContainer3">
+                    <!-- Google AdSense Ad will be inserted here -->
+                    <script async src="https://cdnjs.cloudflare.com/ajax/libs/adsbygoogle-stub/1.0.0/adsbygoogle.min.js"></script>
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-YOUR_AD_CLIENT_ID"
+                         data-ad-slot="YOUR_AD_SLOT_ID"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                    <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>EasyPDF</h3>
+                    <ul class="footer-links">
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#blog">Blog</a></li>
+                        <li><a href="#careers">Careers</a></li>
+                        <li><a href="#privacy">Privacy Policy</a></li>
+                        <li><a href="#terms">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Tools</h3>
+                    <ul class="footer-links">
+                        <li><a href="#edit">Edit PDF</a></li>
+                        <li><a href="#compress">Compress PDF</a></li>
+                        <li><a href="#convert">Convert PDF</a></li>
+                        <li><a href="#merge">Merge PDF</a></li>
+                        <li><a href="#all-tools">All Tools</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="#help">Help Center</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                        <li><a href="#feedback">Feedback</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Connect</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                    <p>Subscribe to our newsletter</p>
+                    <form>
+                        <input type="email" placeholder="Your email" style="width: 100%; padding: 0.7rem; margin-top: 0.5rem; border-radius: 5px; border: none;">
+                        <button type="submit" class="btn" style="width: 100%; margin-top: 0.5rem;">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 EasyPDF. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- JavaScript for the PDF Editor -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize PDF.js worker
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+            
+            // Mobile menu toggle
+            const mobileMenuBtn = document.querySelector('.mobile-menu');
+            const navLinks = document.querySelector('.nav-links');
+            
+            mobileMenuBtn.addEventListener('click', function() {
+                navLinks.classList.toggle('show');
+            });
+            
+            // Tool selection
+            const toolCards = document.querySelectorAll('.tool-card');
+            const editOptions = document.getElementById('editOptions');
+            const compressOptions = document.getElementById('compressOptions');
+            const convertOptions = document.getElementById('convertOptions');
+            const previewContainer = document.getElementById('previewContainer');
+            const dropArea = document.getElementById('dropArea');
+            const fileInput = document.getElementById('fileInput');
+            const selectFileBtn = document.getElementById('selectFileBtn');
+            const processBtn = document.getElementById('processBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const editAgainBtn = document.getElementById('editAgainBtn');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const previewArea = document.getElementById('previewArea');
+            const statusMessage = document.getElementById('statusMessage');
